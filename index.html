@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PET DATA</title>
+<style>
+:root{
+  --bg:#f6f1ea;
+  --bg-2:#fdfbf8;
+  --sand:#ede2d3;
+  --brown:#2f241d;
+  --brown-soft:#6e5b4c;
+  --line:#e7ddd2;
+  --card:#fffaf4;
+  --card-2:#fffdf9;
+  --gold:#c89a52;
+  --gold-2:#e3bf88;
+  --gold-soft:#f6ead8;
+  --accent:#1f4a3a;
+  --accent-2:#355d4f;
+  --shadow:0 18px 50px rgba(47,36,29,.08);
+  --shadow-soft:0 8px 24px rgba(47,36,29,.06);
+  --radius-xl:28px;
+  --radius-lg:20px;
+  --radius-md:14px;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+
+body{
+  margin:0;
+  font-family:Inter,"Noto Sans KR",sans-serif;
+  color:var(--brown);
+  background:
+    radial-gradient(circle at top left, rgba(200,154,82,.08), transparent 24%),
+    radial-gradient(circle at 90% 15%, rgba(31,74,58,.05), transparent 18%),
+    linear-gradient(180deg, var(--bg-2), var(--bg));
+  overflow-x:hidden;
+}
+
+.wrap{
+  max-width:760px;
+  margin:auto;
+  padding:42px 20px 90px;
+}
+
+header{
+  text-align:center;
+  margin-bottom:28px;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 14px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,255,255,.88);
+  box-shadow:var(--shadow-soft);
+  font-size:12px;
+  color:var(--brown-soft);
+  margin-bottom:16px;
+}
+
+h1{
+  margin:0;
+  font-size:42px;
+  line-height:1;
+  letter-spacing:-1.8px;
+  font-weight:800;
+}
+
+.title-gradient{
+  background:linear-gradient(135deg, #2f241d 0%, #866647 45%, #c89a52 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.sub{
+  margin-top:10px;
+  font-size:14px;
+  color:var(--brown-soft);
+  line-height:1.7;
+}
+
+.start,
+.card,
+.analysis,
+.result-head,
+.product,
+.summary-box{
+  background:linear-gradient(180deg, var(--card-2), var(--card));
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+
+.start{
+  text-align:center;
+  padding:46px 24px;
+  border-radius:var(--radius-xl);
+  position:relative;
+  overflow:hidden;
+}
+
+.start::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(140deg, rgba(200,154,82,.08), transparent 34%, transparent 65%, rgba(31,74,58,.05));
+  pointer-events:none;
+}
+
+.start h2{
+  margin:0;
+  font-size:30px;
+  letter-spacing:-1px;
+}
+
+.start button{
+  margin-top:24px;
+  padding:15px 30px;
+  border:none;
+  border-radius:16px;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  color:white;
+  background:linear-gradient(135deg, #2f241d, #705338 60%, #c89a52);
+  box-shadow:0 16px 32px rgba(111,82,51,.18);
+  transition:.22s ease;
+}
+
+.start button:hover{transform:translateY(-2px)}
+
+.card{
+  border-radius:var(--radius-xl);
+  padding:26px;
+  min-height:430px;
+  display:none;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+.progress-shell{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.progress{
+  flex:1;
+  height:10px;
+  border-radius:999px;
+  overflow:hidden;
+  background:#efe6db;
+}
+
+.bar{
+  height:100%;
+  width:0%;
+  border-radius:999px;
+  background:linear-gradient(90deg, var(--gold), var(--gold-2), #f0d2a6);
+  transition:.35s ease;
+}
+
+.stepinfo{
+  min-width:88px;
+  text-align:right;
+  font-size:12px;
+  color:var(--brown-soft);
+}
+
+.step{
+  display:none;
+  flex-direction:column;
+  gap:22px;
+}
+
+.step.active{display:flex}
+
+.step.active .question,
+.step.active .desc,
+.step.active input,
+.step.active .buttons,
+.step.active .gender-select,
+.step.active .weight-select,
+.step.active .special-select{
+  animation:fadeUp .3s ease;
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.question{
+  font-size:29px;
+  font-weight:800;
+  letter-spacing:-1px;
+  line-height:1.3;
+}
+
+.desc{
+  font-size:13px;
+  color:var(--brown-soft);
+  margin-top:-8px;
+  line-height:1.6;
+}
+
+input[type=text]{
+  width:100%;
+  padding:16px 18px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--brown);
+  font-size:16px;
+  outline:none;
+  transition:.2s ease;
+}
+
+input[type=text]::placeholder{color:#ae9d8e}
+
+input[type=text]:focus{
+  border-color:#d5b17e;
+  box-shadow:0 0 0 4px rgba(200,154,82,.12);
+}
+
+.buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.option{
+  padding:15px 14px;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:white;
+  color:var(--brown);
+  font-size:15px;
+  cursor:pointer;
+  transition:.2s ease;
+  box-shadow:var(--shadow-soft);
+  position:relative;
+}
+
+.option:hover{
+  transform:translateY(-2px);
+  border-color:#d8b07a;
+  background:linear-gradient(180deg, #fffdf8, #fbf4eb);
+}
+
+.option.is-selected,
+.gender-btn.is-selected,
+.weight-btn.is-selected,
+.special-btn.is-selected{
+  border-color:#c89a52;
+  background:linear-gradient(180deg, #fffaf2, #f9ecdc);
+  box-shadow:
+    0 12px 30px rgba(111,82,51,.12),
+    0 0 0 3px rgba(200,154,82,.12);
+  transform:translateY(-2px);
+}
+
+.option.is-selected::after,
+.gender-btn.is-selected::after,
+.weight-btn.is-selected::after,
+.special-btn.is-selected::after{
+  content:"✓";
+  position:absolute;
+  top:10px;
+  right:12px;
+  width:22px;
+  height:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  background:linear-gradient(135deg, #a87536, #d5a867);
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  box-shadow:0 6px 14px rgba(111,82,51,.16);
+}
+
+.gender-select,.weight-select,.special-select{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.gender-btn,.weight-btn,.special-btn{
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:22px 12px;
+  background:white;
+  text-align:center;
+  cursor:pointer;
+  transition:.22s ease;
+  color:var(--brown);
+  box-shadow:var(--shadow-soft);
+  position:relative;
+}
+
+.gender-btn:hover,.weight-btn:hover,.special-btn:hover{
+  transform:translateY(-3px);
+  border-color:#d8b07a;
+  background:linear-gradient(180deg, #fffdf9, #f9f0e5);
+}
+
+.emoji{
+  font-size:36px;
+  margin-bottom:8px;
+}
+
+.label{
+  font-size:15px;
+  font-weight:700;
+}
+
+.nav{
+  display:flex;
+  justify-content:space-between;
+  margin-top:28px;
+  gap:12px;
+}
+
+.navbtn{
+  min-width:110px;
+  padding:12px 18px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:white;
+  color:var(--brown);
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.navbtn:hover{transform:translateY(-1px)}
+
+.primary{
+  border:none;
+  color:white;
+  font-weight:800;
+  background:linear-gradient(135deg, #2f241d, #705338 60%, #c89a52);
+  box-shadow:0 12px 24px rgba(111,82,51,.16);
+}
+
+.analysis{
+  display:none;
+  text-align:center;
+  padding:46px 24px;
+  border-radius:var(--radius-xl);
+}
+
+.analysis .loader{
+  width:66px;
+  height:66px;
+  margin:0 auto 18px;
+  border-radius:50%;
+  border:3px solid rgba(200,154,82,.22);
+  border-top-color:#9a6e33;
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+.result{
+  margin-top:34px;
+  animation:fadeUp .35s ease;
+}
+
+.result-head{
+  padding:26px;
+  border-radius:var(--radius-xl);
+}
+
+.result-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:14px;
+  flex-wrap:wrap;
+}
+
+.result h2{
+  margin:0 0 8px;
+  font-size:31px;
+  letter-spacing:-1px;
+}
+
+.action-group{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.edit-btn,
+.retry-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:11px 15px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:white;
+  color:var(--brown);
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s ease;
+  box-shadow:var(--shadow-soft);
+}
+
+.edit-btn:hover,
+.retry-btn:hover{
+  transform:translateY(-2px);
+  border-color:#d8b07a;
+  background:#fffaf3;
+}
+
+.retry-btn{
+  background:linear-gradient(180deg, #fffaf3, #f8efe3);
+}
+
+.summary-box{
+  margin-top:16px;
+  padding:18px;
+  border-radius:18px;
+}
+
+.summary-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.summary-item{
+  padding:12px 14px;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid var(--line);
+  font-size:14px;
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.summary-icon{
+  width:34px;
+  height:34px;
+  flex:0 0 34px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--gold-soft);
+  font-size:16px;
+}
+
+.summary-copy{
+  min-width:0;
+}
+
+.summary-copy b{
+  display:block;
+  margin-bottom:4px;
+  font-size:12px;
+  color:var(--brown-soft);
+  font-weight:700;
+}
+
+.reco-grid{
+  display:grid;
+  gap:14px;
+  margin-top:18px;
+}
+
+.product{
+  padding:20px;
+  border-radius:22px;
+  position:relative;
+  overflow:hidden;
+}
+
+.product::before{
+  content:"";
+  position:absolute;
+  top:-40px;
+  right:-20px;
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(200,154,82,.12), transparent 70%);
+  pointer-events:none;
+}
+
+.product strong{
+  display:block;
+  margin-bottom:8px;
+  font-size:17px;
+  letter-spacing:-.3px;
+}
+
+.product .meta{
+  font-size:14px;
+  color:var(--brown-soft);
+  line-height:1.7;
+}
+
+.product a{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  margin-top:14px;
+  min-width:132px;
+  padding:11px 15px;
+  text-decoration:none;
+  border-radius:12px;
+  color:white;
+  font-weight:800;
+  background:linear-gradient(135deg, #2f241d, #705338 60%, #c89a52);
+  box-shadow:0 10px 22px rgba(111,82,51,.14);
+  transition:.2s ease;
+}
+
+.product a:hover{transform:translateY(-2px)}
+
+.section-title{
+  margin-top:18px;
+  margin-bottom:10px;
+  font-size:18px;
+  font-weight:800;
+  letter-spacing:-.4px;
+}
+
+.breed-note{
+  margin-top:18px;
+  padding:20px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg, #fffdf9, #fff8ef);
+}
+
+.breed-note-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.breed-note p{
+  margin:10px 0 0;
+  font-size:14px;
+  color:var(--brown-soft);
+  line-height:1.8;
+}
+
+.tip{
+  font-size:13px;
+  color:var(--brown-soft);
+  line-height:1.7;
+  margin-top:10px;
+}
+
+.footer-note{
+  margin-top:18px;
+  font-size:12px;
+  color:#8c7868;
+  line-height:1.7;
+}
+
+@media (max-width:640px){
+  .wrap{padding:28px 16px 70px}
+  h1{font-size:34px}
+  .question{font-size:24px}
+  .buttons,
+  .gender-select,
+  .weight-select,
+  .special-select,
+  .summary-grid{
+    grid-template-columns:1fr;
+  }
+  .navbtn{flex:1}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="badge"> · PET DATA · </div>
+    <h1><span class="title-gradient">PET DATA</span></h1>
+    <div class="sub">프리미엄 브랜드 무드로 구성한 반려견 맞춤 사료 추천 경험</div>
+  </header>
+
+  <div class="start" id="start">
+    <h2>3분 강아지 사료 추천</h2>
+    <div class="sub">입력한 정보를 바탕으로 반려견에게 잘 맞는 사료 방향을 추천해드려요</div>
+    <button onclick="startQuiz()">시작하기</button>
+  </div>
+
+  <div class="card" id="quiz">
+    <div class="top-ui">
+      <div class="progress-shell">
+        <div class="progress"><div class="bar" id="bar"></div></div>
+        <div class="stepinfo" id="stepinfo"></div>
+      </div>
+    </div>
+
+    <div class="step active">
+      <div class="question">강아지 이름은?</div>
+      <div class="desc">반려견의 이름을 입력해주세요</div>
+      <input type="text" id="name" placeholder="예: 콩이">
+    </div>
+
+    <div class="step">
+      <div class="question">강아지 품종은?</div>
+      <div class="desc">품종을 검색하면 대표 체급 기준을 함께 보여드려요</div>
+      <input type="text" id="breed" list="breedList" placeholder="예: 말티즈 / 푸들" autocomplete="off">
+      <datalist id="breedList"></datalist>
+      <div id="breedHint" class="tip"></div>
+    </div>
+
+    <div class="step">
+      <div class="question">강아지 성별은?</div>
+      <div class="gender-select">
+        <button class="gender-btn option" data-value="수컷" data-group="gender" type="button">
+          <div class="emoji">🐶♂️</div>
+          <div class="label">수컷</div>
+        </button>
+        <button class="gender-btn option" data-value="암컷" data-group="gender" type="button">
+          <div class="emoji">🐶♀️</div>
+          <div class="label">암컷</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="question">강아지 나이는?</div>
+      <div class="buttons">
+        <button class="option" data-value="퍼피" data-group="age" type="button">🐶 퍼피</button>
+        <button class="option" data-value="어덜트" data-group="age" type="button">🐕 어덜트</button>
+        <button class="option" data-value="시니어" data-group="age" type="button">🐕‍🦺 시니어</button>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="question">강아지 체중은?</div>
+      <div id="weightHint" class="tip"></div>
+      <div class="weight-select">
+        <button class="weight-btn option" data-value="3kg이하" data-group="weight" type="button">
+          <div class="emoji">🐾</div>
+          <div class="label">3kg 이하</div>
+        </button>
+        <button class="weight-btn option" data-value="3~7kg" data-group="weight" type="button">
+          <div class="emoji">🐕</div>
+          <div class="label">3~7kg</div>
+        </button>
+        <button class="weight-btn option" data-value="7~15kg" data-group="weight" type="button">
+          <div class="emoji">🐕‍🦺</div>
+          <div class="label">7~15kg</div>
+        </button>
+        <button class="weight-btn option" data-value="15kg이상" data-group="weight" type="button">
+          <div class="emoji">🦮</div>
+          <div class="label">15kg 이상</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="question">특별히 조심해야 할 특이사항은?</div>
+      <div class="special-select">
+        <button class="special-btn option" data-value="알러지" data-group="special" type="button">
+          <div class="emoji">🤧</div>
+          <div class="label">알러지</div>
+        </button>
+        <button class="special-btn option" data-value="다이어트" data-group="special" type="button">
+          <div class="emoji">⚖️</div>
+          <div class="label">체중관리</div>
+        </button>
+        <button class="special-btn option" data-value="피부" data-group="special" type="button">
+          <div class="emoji">✨</div>
+          <div class="label">피부</div>
+        </button>
+        <button class="special-btn option" data-value="없음" data-group="special" type="button">
+          <div class="emoji">👍</div>
+          <div class="label">없음</div>
+        </button>
+      </div>
+    </div>
+
+    <div class="nav">
+      <button class="navbtn" id="prev" type="button">이전</button>
+      <button class="navbtn primary" id="next" type="button">다음</button>
+    </div>
+  </div>
+
+  <div class="analysis" id="analysis">
+    <div class="loader"></div>
+    <h2>분석 중...</h2>
+    <div class="sub">입력한 조건을 바탕으로 추천 결과를 정리하고 있어요</div>
+  </div>
+
+  <div class="result" id="result"></div>
+
+</div>
+
+<script>
+let step = 0
+const steps = document.querySelectorAll('.step')
+const bar = document.getElementById('bar')
+const stepinfo = document.getElementById('stepinfo')
+
+const data = {
+  gender: '',
+  age: '',
+  weight: '',
+  special: ''
+}
+
+const breedData = {
+"말티즈":{size:"소형견",weight:"2~4kg"},
+"푸들":{size:"소형견",weight:"3~6kg"},
+"토이 푸들":{size:"소형견",weight:"2~4kg"},
+"미니어처 푸들":{size:"소형견",weight:"4~7kg"},
+"스탠다드 푸들":{size:"대형견",weight:"20~32kg"},
+"포메라니안":{size:"소형견",weight:"2~4kg"},
+"시추":{size:"소형견",weight:"4~7kg"},
+"비숑 프리제":{size:"소형견",weight:"5~8kg"},
+"치와와":{size:"초소형",weight:"1~3kg"},
+"닥스훈트":{size:"소형견",weight:"4~9kg"},
+"요크셔 테리어":{size:"소형견",weight:"2~3kg"},
+"퍼그":{size:"소형견",weight:"6~8kg"},
+"페키니즈":{size:"소형견",weight:"3~6kg"},
+"파피용":{size:"소형견",weight:"3~5kg"},
+"말티푸":{size:"소형견",weight:"3~7kg"},
+"코카푸":{size:"소형견",weight:"5~9kg"},
+"골든두들":{size:"중형견",weight:"15~30kg"},
+"포메푸":{size:"소형견",weight:"3~6kg"},
+"폼스키":{size:"중형견",weight:"7~14kg"},
+"코기":{size:"중형견",weight:"10~14kg"},
+"펨브로크 웰시 코기":{size:"중형견",weight:"10~14kg"},
+"카디건 웰시 코기":{size:"중형견",weight:"11~17kg"},
+"비글":{size:"중형견",weight:"9~14kg"},
+"슈나우저":{size:"중형견",weight:"14~20kg"},
+"미니어처 슈나우저":{size:"소형견",weight:"5~8kg"},
+"자이언트 슈나우저":{size:"대형견",weight:"30~47kg"},
+"보더 콜리":{size:"중형견",weight:"14~20kg"},
+"셰틀랜드 쉽독":{size:"소형견",weight:"6~12kg"},
+"콜리":{size:"대형견",weight:"22~34kg"},
+"잭 러셀 테리어":{size:"소형견",weight:"5~7kg"},
+"웨스트 하이랜드 화이트 테리어":{size:"소형견",weight:"7~10kg"},
+"스코티시 테리어":{size:"소형견",weight:"8~10kg"},
+"케언 테리어":{size:"소형견",weight:"6~8kg"},
+"불독":{size:"중형견",weight:"18~23kg"},
+"프렌치 불독":{size:"소형견",weight:"8~14kg"},
+"보스턴 테리어":{size:"소형견",weight:"6~11kg"},
+"불 테리어":{size:"중형견",weight:"22~38kg"},
+"스태퍼드셔 불 테리어":{size:"중형견",weight:"11~17kg"},
+"아메리칸 핏불 테리어":{size:"중형견",weight:"14~30kg"},
+"도베르만":{size:"대형견",weight:"30~40kg"},
+"로트와일러":{size:"대형견",weight:"35~60kg"},
+"저먼 셰퍼드":{size:"대형견",weight:"22~40kg"},
+"벨지안 말리노이즈":{size:"대형견",weight:"20~30kg"},
+"골든 리트리버":{size:"대형견",weight:"25~34kg"},
+"래브라도 리트리버":{size:"대형견",weight:"25~36kg"},
+"플랫 코티드 리트리버":{size:"대형견",weight:"25~36kg"},
+"체서피크 베이 리트리버":{size:"대형견",weight:"25~36kg"},
+"뉴펀들랜드":{size:"초대형견",weight:"45~70kg"},
+"세인트 버나드":{size:"초대형견",weight:"60~90kg"},
+"그레이트 데인":{size:"초대형견",weight:"50~90kg"},
+"그레이트 피레니즈":{size:"초대형견",weight:"45~60kg"},
+"버니즈 마운틴 독":{size:"대형견",weight:"35~55kg"},
+"알래스칸 말라뮤트":{size:"대형견",weight:"34~43kg"},
+"시베리안 허스키":{size:"중형견",weight:"16~27kg"},
+"아키타":{size:"대형견",weight:"32~59kg"},
+"시바 이누":{size:"중형견",weight:"8~11kg"},
+"차우차우":{size:"대형견",weight:"20~32kg"},
+"사모예드":{size:"대형견",weight:"20~30kg"},
+"바센지":{size:"소형견",weight:"9~11kg"},
+"보르조이":{size:"대형견",weight:"27~48kg"},
+"그레이하운드":{size:"대형견",weight:"27~40kg"},
+"휘핏":{size:"중형견",weight:"11~20kg"},
+"아이리시 울프하운드":{size:"초대형견",weight:"54~84kg"},
+"살루키":{size:"대형견",weight:"18~30kg"},
+"파라오 하운드":{size:"중형견",weight:"20~25kg"},
+"오터하운드":{size:"대형견",weight:"30~52kg"},
+"아펜핀셔":{size:"소형견",weight:"3~6kg"},
+"브뤼셀 그리펀":{size:"소형견",weight:"4~6kg"},
+"케이스혼트":{size:"중형견",weight:"16~20kg"},
+"포르투기즈 워터 독":{size:"중형견",weight:"16~27kg"},
+"스패니시 워터 독":{size:"중형견",weight:"14~22kg"},
+"아이슬란딕 쉽독":{size:"중형견",weight:"11~16kg"},
+"핀란드 스피츠":{size:"중형견",weight:"9~15kg"},
+"노르웨이 엘크하운드":{size:"중형견",weight:"20~25kg"},
+"티베탄 마스티프":{size:"초대형견",weight:"40~70kg"},
+"티베탄 테리어":{size:"중형견",weight:"8~14kg"},
+"티베탄 스패니얼":{size:"소형견",weight:"4~7kg"},
+"라사 압소":{size:"소형견",weight:"5~8kg"},
+"하바니즈":{size:"소형견",weight:"4~7kg"},
+"코튼 드 툴레아":{size:"소형견",weight:"4~6kg"},
+"보이킨 스패니얼":{size:"중형견",weight:"11~18kg"},
+"필드 스패니얼":{size:"중형견",weight:"16~23kg"},
+"클럼버 스패니얼":{size:"대형견",weight:"25~39kg"},
+"잉글리시 스프링어 스패니얼":{size:"중형견",weight:"18~25kg"},
+"잉글리시 코커 스패니얼":{size:"중형견",weight:"13~16kg"},
+"아메리칸 코커 스패니얼":{size:"중형견",weight:"9~13kg"},
+"브리타니":{size:"중형견",weight:"14~18kg"},
+"비즐라":{size:"대형견",weight:"20~30kg"},
+"와이마라너":{size:"대형견",weight:"25~40kg"},
+"저먼 쇼트헤어드 포인터":{size:"대형견",weight:"20~32kg"},
+"저먼 와이어헤어드 포인터":{size:"대형견",weight:"20~34kg"},
+"아메리칸 불독":{size:"대형견",weight:"30~58kg"},
+"카네 코르소":{size:"대형견",weight:"40~50kg"},
+"도고 아르헨티노":{size:"대형견",weight:"35~45kg"},
+"도그 드 보르도":{size:"초대형견",weight:"50~68kg"},
+"마스티프":{size:"초대형견",weight:"70~100kg"},
+"네아폴리탄 마스티프":{size:"초대형견",weight:"60~70kg"},
+"불마스티프":{size:"대형견",weight:"45~60kg"},
+"레온베르거":{size:"초대형견",weight:"45~77kg"},
+"쿠바스":{size:"대형견",weight:"32~52kg"},
+"코몬도르":{size:"대형견",weight:"40~60kg"},
+"풀리":{size:"중형견",weight:"10~15kg"},
+"보세론":{size:"대형견",weight:"30~45kg"},
+"브리아드":{size:"대형견",weight:"25~40kg"},
+"아나톨리안 셰퍼드":{size:"초대형견",weight:"40~65kg"},
+"카나안 독":{size:"중형견",weight:"18~25kg"},
+"아메리칸 에스키모":{size:"소형견",weight:"4~16kg"},
+"스키퍼키":{size:"소형견",weight:"3~9kg"},
+"진돗개":{size:"중형견",weight:"15~23kg"},
+"삽살개":{size:"중형견",weight:"18~27kg"},
+"풍산개":{size:"대형견",weight:"25~35kg"}
+}
+
+const breedList = document.getElementById('breedList')
+breedList.innerHTML = Object.keys(breedData).map(b => `<option value="${b}"></option>`).join('')
+
+document.getElementById('breed').addEventListener('input', e => {
+  const breed = e.target.value
+  const hint = document.getElementById('breedHint')
+  const weightHint = document.getElementById('weightHint')
+
+  if (breedData[breed]) {
+    hint.innerHTML = `대표 체급: <b>${breedData[breed].size}</b> (${breedData[breed].weight})<br>※ 일반적인 성견 평균 기준`
+    weightHint.innerHTML = `${breed}의 대표 체중 범위는 ${breedData[breed].weight} 입니다. 실제 체형과 체지방 상태를 함께 고려해주세요.`
+  } else {
+    hint.innerHTML = ""
+    weightHint.innerHTML = ""
+  }
+})
+
+function startQuiz(){
+  document.getElementById('start').style.display = 'none'
+  document.getElementById('quiz').style.display = 'flex'
+  document.getElementById('result').innerHTML = ''
+  updateStep()
+  syncSelectedUI()
+}
+
+function updateStep(){
+  steps.forEach(s => s.classList.remove('active'))
+  steps[step].classList.add('active')
+  bar.style.width = (step / (steps.length - 1)) * 100 + "%"
+  stepinfo.innerText = `STEP ${step + 1} / ${steps.length}`
+
+  const prevBtn = document.getElementById('prev')
+  prevBtn.style.visibility = step === 0 ? 'hidden' : 'visible'
+}
+
+function next(){
+  if(step < steps.length - 1){
+    step++
+  } else {
+    finish()
+    return
+  }
+  updateStep()
+  syncSelectedUI()
+}
+
+function prev(){
+  if(step > 0) step--
+  updateStep()
+  syncSelectedUI()
+}
+
+function goBackToEdit(targetStep = steps.length - 1){
+  document.getElementById('result').innerHTML = ''
+  document.getElementById('analysis').style.display = 'none'
+  document.getElementById('quiz').style.display = 'flex'
+  step = targetStep
+  updateStep()
+  syncSelectedUI()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+function restartQuiz(){
+  data.name = ''
+  data.breed = ''
+  data.gender = ''
+  data.age = ''
+  data.weight = ''
+  data.special = ''
+
+  document.getElementById('name').value = ''
+  document.getElementById('breed').value = ''
+  document.getElementById('breedHint').innerHTML = ''
+  document.getElementById('weightHint').innerHTML = ''
+  clearSelectedUI()
+
+  document.getElementById('result').innerHTML = ''
+  document.getElementById('analysis').style.display = 'none'
+  document.getElementById('quiz').style.display = 'flex'
+  document.getElementById('start').style.display = 'none'
+
+  step = 0
+  updateStep()
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+function clearSelectedUI(){
+  document.querySelectorAll('.is-selected').forEach(el => {
+    el.classList.remove('is-selected')
+  })
+}
+
+function markSelected(group, value){
+  document.querySelectorAll(`[data-group="${group}"]`).forEach(btn => {
+    btn.classList.toggle('is-selected', btn.dataset.value === value)
+  })
+}
+
+function syncSelectedUI(){
+  markSelected('gender', data.gender)
+  markSelected('age', data.age)
+  markSelected('weight', data.weight)
+  markSelected('special', data.special)
+}
+
+document.getElementById('next').onclick = () => {
+  if(step === 0 && !document.getElementById('name').value.trim()) return
+  if(step === 1 && !document.getElementById('breed').value.trim()) return
+  next()
+}
+
+document.getElementById('prev').onclick = prev
+
+document.querySelectorAll('.option').forEach(btn => {
+  btn.onclick = () => {
+    const v = btn.dataset.value
+    const group = btn.dataset.group
+
+    if(group === 'gender') data.gender = v
+    if(group === 'age') data.age = v
+    if(group === 'weight') data.weight = v
+    if(group === 'special') data.special = v
+
+    syncSelectedUI()
+    next()
+  }
+})
+
+function finish(){
+  data.name = document.getElementById('name').value
+  data.breed = document.getElementById('breed').value
+
+  document.getElementById('quiz').style.display = 'none'
+  document.getElementById('analysis').style.display = 'block'
+
+  setTimeout(() => {
+    document.getElementById('analysis').style.display = 'none'
+    showResult()
+  }, 1200)
+}
+
+function getDogType(){
+  if(data.weight === "3kg이하") return "초소형 반려견"
+  if(data.weight === "3~7kg") return "소형 활동형"
+  if(data.weight === "7~15kg") return "중형 견종"
+  if(data.weight === "15kg이상") return "대형 견종"
+  return "반려견"
+}
+
+function getBreedDescription(){
+  if (breedData[data.breed]) {
+    return `${data.breed}는 일반적으로 ${breedData[data.breed].size}에 속하며 평균 체중 범위는 ${breedData[data.breed].weight} 정도로 보는 편입니다. 급여 시에는 단순 체중뿐 아니라 활동량, 체형, 피모 상태, 소화 민감도까지 함께 고려하는 것이 좋습니다.`
+  }
+  return `${data.breed || '해당 견종'}에 대한 세부 기준은 별도 확인이 필요합니다. 실제 급여 방향은 현재 체형, 활동량, 배변 상태, 기호성을 함께 보며 조절하는 것이 좋습니다.`
+}
+
+function showResult(){
+  const box = document.getElementById('result')
+  const breedMeta = breedData[data.breed]
+    ? `대표 체급 ${breedData[data.breed].size} · 평균 ${breedData[data.breed].weight}`
+    : `품종 기준 데이터 없음`
+
+  box.innerHTML = `
+    <div class="result-head">
+      <div class="result-top">
+        <div>
+          <h2>${data.name || '반려견'}에게 잘 맞는 추천</h2>
+          <p class="sub">${data.breed || '-'} · ${data.gender || '-'} · ${data.age || '-'} · ${data.weight || '-'}</p>
+        </div>
+        <div class="action-group">
+          <button class="edit-btn" type="button" onclick="goBackToEdit()">입력값 수정하기</button>
+          <button class="retry-btn" type="button" onclick="restartQuiz()">다시 추천받기</button>
+        </div>
+      </div>
+
+      <div class="summary-box">
+        <div class="summary-grid">
+          <div class="summary-item">
+            <div class="summary-icon">🐶</div>
+            <div class="summary-copy"><b>이름</b>${data.name || '-'}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-icon">🧬</div>
+            <div class="summary-copy"><b>견종</b>${data.breed || '-'}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-icon">⚥</div>
+            <div class="summary-copy"><b>성별</b>${data.gender || '-'}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-icon">🕒</div>
+            <div class="summary-copy"><b>나이</b>${data.age || '-'}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-icon">⚖️</div>
+            <div class="summary-copy"><b>체중</b>${data.weight || '-'}</div>
+          </div>
+          <div class="summary-item">
+            <div class="summary-icon">✨</div>
+            <div class="summary-copy"><b>특이사항</b>${data.special || '-'}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">잘 맞는 추천</div>
+
+      <div class="reco-grid">
+        <div class="product">
+          <strong>🥇 가장 추천</strong>
+          <div class="meta">기본 영양 밸런스와 일상 급여 안정성을 우선한 메인 추천입니다.</div>
+          <a href="https://link.coupang.com" target="_blank">가격 확인하기</a>
+        </div>
+
+        <div class="product">
+          <strong>🥈 가성비 추천</strong>
+          <div class="meta">처음 구매하거나 지속 급여 비용을 고려할 때 보기 좋은 옵션입니다.</div>
+          <a href="https://link.coupang.com" target="_blank">오늘 배송 확인</a>
+        </div>
+
+        <div class="product">
+          <strong>🥉 케어 추천</strong>
+          <div class="meta">${data.special || '기본'} 케어 포인트를 보완하는 방향으로 잡은 추천입니다.</div>
+          <a href="https://link.coupang.com" target="_blank">최저가 보기</a>
+        </div>
+
+        <div class="product">
+          <strong>💡 사료 고르는 팁</strong>
+          <div class="tip">
+            첫 구매는 작은 용량으로 시작하고, 기존 사료와 7일 이상 천천히 섞어 바꾸는 것이 좋아요.
+            알러지, 피부, 체중관리 이슈가 있으면 단백원과 칼로리 밀도를 함께 확인해주세요.
+          </div>
+        </div>
+      </div>
+
+      <div class="breed-note">
+        <div class="breed-note-top">
+          <div>
+            <div class="section-title" style="margin:0">견종 최종 설명</div>
+            <div class="sub" style="margin-top:6px">${breedMeta}</div>
+          </div>
+          <button class="edit-btn" type="button" onclick="goBackToEdit(1)">수정하기</button>
+        </div>
+        <p>${getBreedDescription()}</p>
+      </div>
+
+      <div class="footer-note">
+        본 추천은 입력값 기반 가이드이며 실제 건강 상태, 중성화 여부, 활동량, 질환 이력에 따라 달라질 수 있습니다.
+      </div>
+    </div>
+  `
+}
+</script>
+</body>
+</html>
