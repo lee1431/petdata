@@ -823,6 +823,39 @@ const data = {
   special: ''
 }
 
+const STORAGE_KEY = 'petdata-state-v1'
+function saveAppState(screen = 'quiz'){
+  const state = {
+    step,
+    screen,
+    data: {
+      name: document.getElementById('name')?.value || '',
+      breed: document.getElementById('breed')?.value || '',
+      gender: data.gender || '',
+      age: data.age || '',
+      weight: data.weight || '',
+      special: data.special || ''
+    }
+  }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+}
+
+function loadAppState(){
+  const raw = localStorage.getItem(STORAGE_KEY)
+  if(!raw) return null
+
+  try {
+    return JSON.parse(raw)
+  } catch (e) {
+    localStorage.removeItem(STORAGE_KEY)
+    return null
+  }
+}
+
+function clearAppState(){
+  localStorage.removeItem(STORAGE_KEY)
+}
+
 const breedData = {
 "말티즈":{size:"소형견",weight:"2~4kg"},
 "푸들":{size:"소형견",weight:"3~6kg"},
@@ -952,6 +985,8 @@ document.getElementById('breed').addEventListener('input', e => {
     hint.innerHTML = ""
     weightHint.innerHTML = ""
   }
+
+  saveAppState('quiz')
 })
 
 function startQuiz(){
@@ -960,6 +995,7 @@ function startQuiz(){
   document.getElementById('result').innerHTML = ''
   updateStep()
   syncSelectedUI()
+  saveAppState('quiz')
 }
 
 function updateStep(){
@@ -970,6 +1006,8 @@ function updateStep(){
 
   const prevBtn = document.getElementById('prev')
   prevBtn.style.visibility = step === 0 ? 'hidden' : 'visible'
+
+  saveAppState('quiz')
 }
 
 function next(){
@@ -1000,6 +1038,8 @@ function goBackToEdit(targetStep = steps.length - 1){
 }
 
 function restartQuiz(){
+  clearAppState()
+  
   data.name = ''
   data.breed = ''
   data.gender = ''
@@ -1061,6 +1101,7 @@ document.querySelectorAll('.option').forEach(btn => {
     if(group === 'special') data.special = v
 
     syncSelectedUI()
+    saveAppState('quiz')
     next()
   }
 })
@@ -1094,6 +1135,7 @@ function getBreedDescription(){
 }
 
 function showResult(){
+  saveAppState('result')
   const box = document.getElementById('result')
   const breedMeta = breedData[data.breed]
     ? `대표 체급 ${breedData[data.breed].size} · 평균 ${breedData[data.breed].weight}`
@@ -1237,6 +1279,51 @@ function showResult(){
     </div>
   `
 }
+
+function restoreAppState(){
+  const saved = loadAppState()
+  if(!saved) return
+
+  step = typeof saved.step === 'number' ? saved.step : 0
+
+  data.name = saved.data?.name || ''
+  data.breed = saved.data?.breed || ''
+  data.gender = saved.data?.gender || ''
+  data.age = saved.data?.age || ''
+  data.weight = saved.data?.weight || ''
+  data.special = saved.data?.special || ''
+
+  document.getElementById('name').value = data.name
+  document.getElementById('breed').value = data.breed
+
+  const hint = document.getElementById('breedHint')
+  const weightHint = document.getElementById('weightHint')
+
+  if (breedData[data.breed]) {
+    hint.innerHTML = `대표 체급: <b>${breedData[data.breed].size}</b> (${breedData[data.breed].weight})<br>※ 일반적인 성견 평균 기준`
+    weightHint.innerHTML = `${data.breed}의 대표 체중 범위는 ${breedData[data.breed].weight} 입니다. 실제 체형과 체지방 상태를 함께 고려해주세요.`
+  } else {
+    hint.innerHTML = ''
+    weightHint.innerHTML = ''
+  }
+
+  syncSelectedUI()
+
+  document.getElementById('start').style.display = 'none'
+  document.getElementById('analysis').style.display = 'none'
+
+  if(saved.screen === 'result'){
+    document.getElementById('quiz').style.display = 'none'
+    showResult()
+  } else {
+    document.getElementById('quiz').style.display = 'flex'
+    updateStep()
+  }
+}
+
+
+restoreAppState()
+  
 </script>
 </body>
 </html>
