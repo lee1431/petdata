@@ -595,21 +595,43 @@ input[type=text]:focus{
 }
 
 
-.coupang-banner {
-  width: 100%;
-  max-width: 728px;
-  margin: 0 auto;
+.coupang-banner{
+  width:100%;
+  max-width:728px;
+  margin:26px auto;
+  padding:12px;
+  border-radius:20px;
+  border:1px solid var(--line);
+  background:linear-gradient(180deg,var(--card-2),var(--card));
+  box-shadow:var(--shadow-soft);
+  overflow:hidden;
 }
 
-.coupang-banner a {
-  display: block;
-  width: 100%;
+.coupang-banner a{
+  display:block;
+  width:100%;
+  border-radius:14px;
+  overflow:hidden;
 }
 
-.coupang-banner img {
-  display: block;
-  width: 100%;
-  height: auto;
+.coupang-banner img{
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:12px;
+  transition:.25s ease;
+}
+
+.coupang-banner:hover img{
+  transform:scale(1.02);
+}
+
+@media (max-width:640px){
+  .coupang-banner{
+    margin:20px auto;
+    padding:10px;
+    border-radius:16px;
+  }
 }
 
   
@@ -619,11 +641,13 @@ input[type=text]:focus{
 <div class="wrap">
 
   <header>
+
     <div class="coupang-banner">
       <a href="https://link.coupang.com/a/d3Fbpv" target="_blank" rel="noopener noreferrer sponsored" referrerpolicy="unsafe-url">
-        <img src="https://ads-partners.coupang.com/banners/972223?subId=&traceId=V0-301-7e6e8eb8ddfa1bfb-I972223&w=728&h=90" alt="쿠팡 파트너스 배너" loading="lazy">
+        <img src="https://ads-partners.coupang.com/banners/972223?subId=&traceId=V0-301-7e6e8eb8ddfa1bfb-I972223&w=728&h=90" alt="쿠팡 파트너스 배너"> 
       </a>
     </div>
+    
     <div class="badge"> · PET DATA · </div>    
     <h1><span class="title-gradient">PET DATA</span></h1>
     <div class="sub">프리미엄 브랜드 무드로 구성한 반려견 맞춤 사료 추천 경험</div>
